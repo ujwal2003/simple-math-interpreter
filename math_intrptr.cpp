@@ -1,6 +1,6 @@
 #include <iostream>
-
 #include "tokens.h"
+#include "debugFuncs.h"
 
 using namespace std;
 
