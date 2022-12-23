@@ -9,6 +9,8 @@ enum TokenType {
 	T_Number,
 	T_Variable,
 	T_Equal,
+	T_OpenParen,
+	T_ClosedParen,
 	T_Plus,
 	T_Minus,
 	T_Multiply,
