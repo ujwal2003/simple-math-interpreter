@@ -5,10 +5,16 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-	//only accept one argument
+	//only accept one argument, or "-debug" option
+	bool isDebugOn = false;
 	if(argc > 1) {
-		cout << "Math-Intrptr : additional arguments are not accepted." << endl;
-		return 0;
+		string optionalArg = argv[1];
+		if(optionalArg != "-debug") {
+			cout << "Math-Intrptr Error: invalid argument, only accepted arguments are \"-debug\" or no additional arguments." << endl;
+			return 0;
+		} else {
+			isDebugOn = true;
+		}
 	}
 	
 	//startup message
