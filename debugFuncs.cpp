@@ -14,6 +14,8 @@ string representToken(Token t) {
 		case T_Number: return "NUMBER: " + t.value;
 		case T_Variable: return "VAR: " + t.value;
 		case T_Equal: return "EQUALS";
+		case T_OpenParen: return "OPEN_PAREN";
+		case T_ClosedParen: return "CLOSE_PAREN";
 		case T_Plus: return "PLUS";
 		case T_Minus: return "MINUS";
 		case T_Multiply: return "MULT";
