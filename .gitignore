@@ -1,0 +1,3 @@
+# ignore any .exe files and help doc
+*.exe
+info&plan.txt
