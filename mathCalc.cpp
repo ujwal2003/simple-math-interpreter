@@ -42,7 +42,6 @@ int main(int argc, char *argv[]) {
 				cout << e.what() << endl;
 			}
 		} else {
-			//TODO: add "help()" message
 			//close the program when "exit()" is inputted
 			continueInterpreter = false;
 		}
