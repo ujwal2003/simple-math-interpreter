@@ -9,6 +9,7 @@
 
 using namespace std;
 
+//advance to next character
 void Lexer::advanceChar() {
 	lineIdx += 1;
 	if(lineIdx < line.size() && lineIdx >= 0) {
@@ -18,6 +19,7 @@ void Lexer::advanceChar() {
 	}
 }
 
+//constructor
 Lexer::Lexer(string inputLine) {
 	lineIdx = -1;
 	currChar = '\0';
@@ -25,6 +27,7 @@ Lexer::Lexer(string inputLine) {
 	advanceChar();
 }
 
+//take input and create list of tokens
 vector<Token> Lexer::tokenize() {
 	vector<Token> tokens;
 	while(currChar != '\0') {
