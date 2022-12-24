@@ -79,7 +79,7 @@ Token Lexer::createNumber() {
 	
 	if(isalpha(currChar)) {
 		cout << "error: alphabetic characters cannot be in number, variables must begin with alphabetic character." << endl;
-		cout << "---> '" << currChar << '\'';
+		cout << '\'' << currChar << "' <--- ";
 		throw MathInterpreterError();
 	}
 	
