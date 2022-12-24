@@ -15,6 +15,7 @@ enum TokenType {
 	T_Minus,
 	T_Multiply,
 	T_Divide,
+	T_UNKNOWN
 };
 
 struct Token {

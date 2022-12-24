@@ -10,7 +10,7 @@
 using namespace std;
 
 string representToken(Token t) {
-	switch(t) {
+	switch(t.type) {
 		case T_Number: return "NUMBER: " + t.value;
 		case T_Variable: return "VAR: " + t.value;
 		case T_Equal: return "EQUALS";
@@ -27,7 +27,8 @@ string representToken(Token t) {
 void representTokenList(vector<Token> tokens, bool debugFlag) {
 	if(debugFlag) {
 		cout << '[';
-		for(bool isFirst{true}; Token t: tokens) {
+		bool isFirst = true;
+		for(Token t: tokens) {
 			cout << (isFirst ? isFirst = false, "" : ", ");
 			cout << representToken(t);
 		}

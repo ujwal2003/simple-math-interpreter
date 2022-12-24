@@ -1,5 +1,6 @@
 #include <iostream>
 #include "tokens.h"
+#include "lexer.h"
 #include "debugFuncs.h"
 
 using namespace std;
@@ -30,7 +31,9 @@ int main(int argc, char *argv[]) {
 		getline(cin, inputLine);
 		
 		if(inputLine != "exit()") {
-			cout << inputLine << endl; //temporary
+			Lexer lexer(inputLine);
+			vector<Token> tokens = lexer.tokenize();
+			representTokenList(tokens, isDebugOn);
 		} else {
 			//TODO: add "help()" message
 			//close the program when "exit()" is inputted
