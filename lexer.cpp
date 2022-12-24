@@ -6,6 +6,7 @@
 
 #include "tokens.h"
 #include "lexer.h"
+#include "error.h"
 
 using namespace std;
 
@@ -51,9 +52,8 @@ vector<Token> Lexer::tokenize() {
 		}
 		//error
 		else {
-			cout << "invalid character error ---> " << currChar << endl;
-			tokens.clear();
-			return tokens;
+			cout << "error: invalid character error ---> '" << currChar << '\'' << endl;
+			throw MathInterpreterError();
 		}
 	}
 	
@@ -75,6 +75,12 @@ Token Lexer::createNumber() {
 		
 		number += currChar;
 		advanceChar();
+	}
+	
+	if(isalpha(currChar)) {
+		cout << "error: alphabetic characters cannot be in number, variables must begin with alphabetic character." << endl;
+		cout << "---> '" << currChar << '\'';
+		throw MathInterpreterError();
 	}
 	
 	if(number[0] == '.')
