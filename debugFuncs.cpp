@@ -26,7 +26,7 @@ string representToken(Token t) {
 
 void representTokenList(vector<Token> tokens, bool debugFlag) {
 	if(debugFlag) {
-		cout << '[';
+		cout << "DEBUG(tokens): " << '[';
 		bool isFirst = true;
 		for(Token t: tokens) {
 			cout << (isFirst ? isFirst = false, "" : ", ");
