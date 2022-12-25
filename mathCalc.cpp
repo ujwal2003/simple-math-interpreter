@@ -1,6 +1,7 @@
 #include <iostream>
 #include "tokens.h"
 #include "lexer.h"
+#include "ast.h"
 #include "debugFuncs.h"
 #include "error.h"
 

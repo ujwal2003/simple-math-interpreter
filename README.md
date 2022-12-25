@@ -4,7 +4,7 @@ written in c++, still a work in progress.
 current progress:  
 - [x] tokens
 - [x] lexer
-- [ ] AST
+- [x] AST
 - [ ] parser
 - [ ] interpreter  
     - [ ] simple expressions

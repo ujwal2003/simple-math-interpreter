@@ -36,4 +36,69 @@ void representTokenList(vector<Token> tokens, bool debugFlag) {
 	}
 }
 
+void representAST(ASTNode* root) {
+	//null
+	if(root == nullptr) {
+		cout << "NULL";
+		return;
+	}
+	//number node
+	if(root->type == N_Number) {
+		cout << root->nodeValue;
+		return;
+	}
+	//variable node
+	if(root->type == N_Variable) {
+		cout << root->nodeValue;
+		return;
+	}
+	//assign node
+	if(root->type == N_Assign) {
+		representAST(root->left); //get var
+		cout << " = ";
+		representAST(root->right); //get expression
+		return;
+	}
+	//add node
+	if(root->type == N_Add) {
+		cout << '(';
+		representAST(root->left);
+		cout << " + ";
+		representAST(root->right);
+		cout << ')';
+		return;
+	}
+	//subtract node
+	if(root->type == N_Subtract) {
+		cout << '(';
+		representAST(root->left);
+		cout << " - ";
+		representAST(root->right);
+		cout << ')';
+		return;
+	}
+	//multiply node
+	if(root->type == N_Multipy) {
+		cout << '(';
+		representAST(root->left);
+		cout << " * ";
+		representAST(root->right);
+		cout << ')';
+		return;
+	}
+	//divide node
+	if(root->type == N_Divide) {
+		cout << '(';
+		representAST(root->left);
+		cout << " / ";
+		representAST(root->right);
+		cout << ')';
+		return;
+	}
+	//error
+	else {
+		cout << "{ERROR}";
+		return;
+	}
+}
 #endif
