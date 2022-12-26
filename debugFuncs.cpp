@@ -20,6 +20,7 @@ string representToken(Token t) {
 		case T_Minus: return "MINUS";
 		case T_Multiply: return "MULT";
 		case T_Divide: return "DIV";
+		case T_NONE: return "NONE";
 		default: return "ERROR: UNKNOWN";
 	}
 }
