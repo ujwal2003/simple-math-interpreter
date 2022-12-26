@@ -22,6 +22,7 @@ struct Token {
 	TokenType type;
 	string value;
 	
+	Token() {}
 	Token(TokenType inType, string inVal="") {
 		type = inType;
 		value = inVal;
