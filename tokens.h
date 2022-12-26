@@ -15,7 +15,7 @@ enum TokenType {
 	T_Minus,
 	T_Multiply,
 	T_Divide,
-	T_UNKNOWN
+	T_UNKNOWN, T_NONE
 };
 
 struct Token {
@@ -25,6 +25,11 @@ struct Token {
 	Token(TokenType inType, string inVal="") {
 		type = inType;
 		value = inVal;
+	}
+	
+	void copyToken(Token t) {
+		type = t.type;
+		value = t.value;
 	}
 };
 
