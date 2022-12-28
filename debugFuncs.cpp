@@ -98,7 +98,7 @@ void representAST(ASTNode* root) {
 	}
 	//error
 	else {
-		cout << "{ERROR}";
+		cout << "{ERROR:UNKNOWN}";
 		return;
 	}
 }
