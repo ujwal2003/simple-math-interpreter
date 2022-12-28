@@ -19,12 +19,6 @@ void ASTNode::init_NumberNode(string number) {
 	nodeValue = number;
 }
 
-//unary operator node
-void ASTNode::init_UnaryOperatorNode(ASTNode* numVal, string sign) {
-	left = numVal;
-	nodeValue = sign;
-}
-
 //variable node
 void ASTNode::init_VariableNode(string var) {
 	nodeValue = var;

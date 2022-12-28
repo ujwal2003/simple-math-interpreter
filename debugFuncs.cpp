@@ -53,12 +53,6 @@ void representAST(ASTNode* root) {
 		cout << root->nodeValue;
 		return;
 	}
-	//unary operator node
-	if(root->type == N_UnaryOperator) {
-		cout << root->nodeValue;
-		representAST(root->left);
-		return;
-	}
 	//assign node
 	if(root->type == N_Assign) {
 		representAST(root->left); //get var

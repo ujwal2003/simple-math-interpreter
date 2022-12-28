@@ -7,7 +7,7 @@ using namespace std;
 enum NodeType {
 	N_NULL, 
 	N_Number, N_Variable, 
-	N_Assign, N_UnaryOperator,
+	N_Assign,
 	N_Add, N_Subtract, N_Multipy, N_Divide
 };
 
@@ -21,7 +21,6 @@ class ASTNode {
 		
 		ASTNode(NodeType initNodeType);
 		void init_NumberNode(string number);
-		void init_UnaryOperatorNode(ASTNode* numVal, string sign); //numVal will always be left node
 		void init_VariableNode(string var);
 		void init_AssignNode(ASTNode* var, ASTNode* expression);
 		void init_AddNode(ASTNode* opLeft, ASTNode* opRight);
