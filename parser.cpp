@@ -50,4 +50,32 @@ void Parser::parseAndConstructAST() {
 ASTNode* Parser::getAST() {
 	return tree;
 }
+
+//checks for atom ::= number | idt
+ASTNode* Parser::atom(int backTrackIdx) {
+	ASTNode* result = nullptr;
+	
+	//number
+	if(currTok.type == T_Number) {
+		result = new ASTNode(N_Number);
+		result->init_NumberNode(currTok.value);
+		nextToken();
+		return result;
+	}
+	
+	//variable
+	else if(currTok.type == T_Variable) {
+		result = new ASTNode(N_Variable);
+		result->init_VariableNode(currTok.value);
+		nextToken();
+		return result;
+	}
+	
+	//if neither number or variable, return null node and backtrack
+	else {
+		result = new ASTNode(N_NULL); 
+		goToTokenAtIndex(backTrackIdx);
+		return result;
+	}
+}
 #endif

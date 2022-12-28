@@ -23,6 +23,8 @@ class Parser {
 		Parser(vector<Token> inTokenList);
 		void parseAndConstructAST();
 		ASTNode* getAST();
+		
+		ASTNode* atom(int backTrackIdx);
 };
 
 #endif
