@@ -33,6 +33,7 @@ void Parser::goToTokenAtIndex(int index) {
 
 //constructor
 Parser::Parser(vector<Token> inTokenList) {
+	tree = nullptr;
 	tokenIdx = -1;
 	currTok.copyToken(Token(T_NONE));
 	tokens = inTokenList;
@@ -40,10 +41,13 @@ Parser::Parser(vector<Token> inTokenList) {
 }
 
 //main parse function
-ASTNode* Parser::parseAndConstructAST() {
+void Parser::parseAndConstructAST() {
 	if(currTok.type == T_NONE)
-		return nullptr;
-	
-	return nullptr;
+		tree = nullptr;
+}
+
+//return constructed abstract syntax tree
+ASTNode* Parser::getAST() {
+	return tree;
 }
 #endif

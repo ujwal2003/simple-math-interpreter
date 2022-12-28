@@ -14,13 +14,15 @@ class Parser {
 		int tokenIdx;
 		Token currTok;
 		vector<Token> tokens;
+		ASTNode* tree;
 		
 		void nextToken();
 		void goToTokenAtIndex(int index);
 		
 	public:
 		Parser(vector<Token> inTokenList);
-		ASTNode* parseAndConstructAST();
+		void parseAndConstructAST();
+		ASTNode* getAST();
 };
 
 #endif
