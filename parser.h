@@ -18,6 +18,7 @@ class Parser {
 		
 		void nextToken();
 		void goToTokenAtIndex(int index);
+		void raiseError();
 		
 	public:
 		Parser(vector<Token> inTokenList);
@@ -26,6 +27,10 @@ class Parser {
 		
 		ASTNode* atom(int backTrackIdx);
 		vector<ASTNode*> expr_infixExpr();
+		void expr_restOfInfixExpr(vector<ASTNode*> &v);
+		bool isAtom(Token t);
+		bool isTokenIn(Token t, string check);
+		ASTNode* returnOperationNodeFromToken(Token t);
 };
 
 #endif
