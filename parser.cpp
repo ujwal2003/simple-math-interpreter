@@ -298,5 +298,45 @@ queue<ASTNode*> Parser::expr_shuntingYardAlgorithm(vector<ASTNode*> &v) {
 	
 	return outputQueue;
 }
+
+//returns AST of expression
+ASTNode* Parser::expr(int backTrackIdx) {
+	vector<ASTNode*> infixExpr = expr_infixExpr();
+	queue<ASTNode*> postfixExpr = expr_shuntingYardAlgorithm(infixExpr);
+	
+	stack<ASTNode*> astStack;
+	while(!postfixExpr.empty()) {
+		if(postfixExpr.front()->type == N_Number || postfixExpr.front()->type == N_Variable) {
+			astStack.push(postfixExpr.front());
+			postfixExpr.pop();
+		}
+		
+		if(isOperator(postfixExpr.front()->type)) {
+			if(astStack.size() >= 2) {
+				postfixExpr.front()->left = astStack.top();
+				astStack.pop();
+				postfixExpr.front()->right = astStack.top();
+				astStack.pop();
+				astStack.push(postfixExpr.front());
+				postfixExpr.pop();
+			} else {
+				//error
+				for(ASTNode* n: infixExpr)
+					delete n;
+				cout << "not enough arguments for operation" << endl;
+				raiseError();
+			}
+		}
+	}
+	
+	if(astStack.size() != 1) {
+		for(ASTNode* n: infixExpr)
+			delete n;
+		cout << "failed to build abstract syntax tree for given expression" << endl;
+		raiseError();
+	}
+	
+	return astStack.top();
+}
 /*==end expression rule methods==*/
 #endif
