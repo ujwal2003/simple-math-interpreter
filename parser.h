@@ -25,6 +25,7 @@ class Parser {
 		ASTNode* getAST();
 		
 		ASTNode* atom(int backTrackIdx);
+		vector<ASTNode*> expr_infixExpr();
 };
 
 #endif

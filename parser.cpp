@@ -78,4 +78,42 @@ ASTNode* Parser::atom(int backTrackIdx) {
 		return result;
 	}
 }
+
+/*====expression rule methods====*/
+//method for initial tokens
+vector<ASTNode*> Parser::expr_infixExpr() {
+	vector<ASTNode*> infixExprList;
+	
+	//unary operation
+	if(currTok.type == T_Plus || currTok.type == T_Minus) {
+		string sign = (currTok.type == T_Minus) ? "-" : "";
+		nextToken();
+		if(currTok.type == T_Number || currTok.type == T_Variable) {
+			infixExprList.push_back(atom(tokenIdx));
+			string temp = infixExprList[infixExprList.size()-1]->nodeValue;
+			infixExprList[infixExprList.size()-1]->nodeValue = sign + temp;
+			if(currTok.type != T_NONE) {
+				//TODO: expr_restOfInfixExpr()
+			}
+		} else {
+			//raise error
+		}
+	}
+	
+	//non-unary operation
+	else if(currTok.type == T_Number || currTok.type == T_Variable) {
+		infixExprList.push_back(atom(tokenIdx));
+		if(currTok.type != T_NONE) {
+			//TODO: expr_restOfInfixExpr()
+		}
+	}
+	
+	//error
+	else {
+		//raise error
+	}
+	
+	return infixExprList;
+}
+/*==end expression rule methods==*/
 #endif
