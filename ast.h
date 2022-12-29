@@ -8,7 +8,8 @@ enum NodeType {
 	N_NULL, 
 	N_Number, N_Variable, 
 	N_Assign,
-	N_Add, N_Subtract, N_Multipy, N_Divide
+	N_Add, N_Subtract, N_Multipy, N_Divide,
+	N_dummyOpenParen, N_dummyCloseParen
 };
 
 class ASTNode {
