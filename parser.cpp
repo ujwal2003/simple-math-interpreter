@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include "tokens.h"
 #include "ast.h"
 #include "error.h"
@@ -224,6 +226,77 @@ ASTNode* Parser::returnOperationNodeFromToken(Token t) {
 		case T_ClosedParen: return new ASTNode(N_dummyCloseParen);
 		default: return new ASTNode(N_NULL);
 	}
+}
+
+//returns precedence of operator
+int Parser::operatorPrecedence(NodeType n) {
+	switch(n) {
+		case N_Add: return 1;
+		case N_Subtract: return 1;
+		case N_Multipy: return 2;
+		case N_Divide: return 2;
+		default: return -1;
+	}
+}
+
+//returns true if node type is operator
+bool Parser::isOperator(NodeType n) {
+	switch(n) {
+		case N_Add: return true;
+		case N_Subtract: return true;
+		case N_Multipy: return true;
+		case N_Divide: return true;
+		default: return false;
+	}
+}
+
+//changes infix expression into postfix
+queue<ASTNode*> Parser::expr_shuntingYardAlgorithm(vector<ASTNode*> &v) {
+	queue<ASTNode*> outputQueue;
+	stack<ASTNode*> operatorStack;
+	
+	for(ASTNode* node: v) {
+		if(node->type == N_Number || node->type == N_Variable) {
+			outputQueue.push(node);
+		}
+		
+		else if(isOperator(node->type)) {
+			if(!operatorStack.empty() && isOperator(operatorStack.top()->type)) {
+				while(operatorPrecedence(operatorStack.top()->type) > operatorPrecedence(node->type)) {
+					outputQueue.push(operatorStack.top());
+					operatorStack.pop();
+				}
+			}
+			
+			operatorStack.push(node);
+		}
+		
+		else if(node->type == N_dummyOpenParen)
+			operatorStack.push(node);
+		
+		else if(node->type == N_dummyCloseParen) {
+			while(!operatorStack.empty() && operatorStack.top()->type != N_dummyOpenParen) {
+				outputQueue.push(operatorStack.top());
+				operatorStack.pop();
+			}
+			
+			if(operatorStack.top()->type == N_dummyOpenParen) {
+				operatorStack.pop();
+			} else {
+				for(int i=0; i<v.size(); i++)
+					delete v[i];
+				cout << "mismatched parenthesis error" << endl;
+				raiseError();
+			}
+		}
+	}
+	
+	while(!operatorStack.empty()) {
+		outputQueue.push(operatorStack.top());
+		operatorStack.pop();
+	}
+	
+	return outputQueue;
 }
 /*==end expression rule methods==*/
 #endif

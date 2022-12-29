@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include "tokens.h"
 #include "ast.h"
 #include "error.h"
@@ -31,6 +33,9 @@ class Parser {
 		bool isAtom(Token t);
 		bool isTokenIn(Token t, string check);
 		ASTNode* returnOperationNodeFromToken(Token t);
+		int operatorPrecedence(NodeType n);
+		bool isOperator(NodeType n);
+		queue<ASTNode*> expr_shuntingYardAlgorithm(vector<ASTNode*> &v);
 };
 
 #endif
