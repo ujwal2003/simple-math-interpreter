@@ -1,3 +1,4 @@
 # ignore any .exe files and help doc
 *.exe
-**/docs
+grammar.txt
+info&plan.txt

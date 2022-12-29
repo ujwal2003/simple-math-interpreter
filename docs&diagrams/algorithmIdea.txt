@@ -1,0 +1,130 @@
+###
+expression rule:
+	list<AST Nodes> infixNodesList = infixExpressionAlgorithm()
+	queue<AST Nodes> postfixExpr = shuntingYardAlgorithm(infixNodesList)
+	clear the infixNodesList
+	
+	astStack <-- <stack of AST Nodes>
+	while postfixExpr is not empty:
+		if the front of postfixExpr is an atom:
+			push it into the astStack
+			pop the front of postfixExpr
+			
+		if the front of postfixExpr is {+ or - or * or /}:
+			if the astStack has at least a size of 2:
+				pop the top of the astStack and make it the left child of the front of postfixExpr
+				pop the top of the astStack and make it the right child of the front of postfixExpr
+				push the front of postfixExpr into the astStack
+				pop the front of postfixExpr
+			else:
+				throw a not enough arguments error
+				
+	if the astStack has a size of 1:
+		return the top of the astStack
+	else:
+		throw a invalid syntax error
+
+
+###
+infixExpressionAlgorithm:
+	list <-- <list of AST Nodes>
+	
+	initialTokensOfExpr:
+		if the current token is an atom or {+ or -}:
+			if current token is {+ or -}:
+				advance to next token
+				if current token is atom:
+					AST node->{number or variable}("{+ or -}" + atom)
+					list.append(node)
+					advance to next token
+					if current token is not none:
+						go to infixNodesList()
+					else:
+						return list
+					
+			if current token is atom:
+				AST node->{number or variable}(atom)
+				list.append(node)
+				advance to next token
+				if current token is not none:
+					go to infixNodesList()
+				else:
+					return list
+	
+	infixNodesList:
+		prevToken = atom
+		nextAtomIsNegative = false
+		
+		while the current token is not none:
+			if the current token is {+ or - or * or /} and prevToken is atom:
+				list.append(ASTNode->operation({+ or - or * or /}))
+				prevToken = current token
+				advance to next token
+				
+			else if the current token is {+ or -} and prevToken is {open_paren or closed_paren}:
+				nextAtomIsNegative = true
+				prevToken = current token
+				advance to next token
+				
+			else if the current token is an atom and prevToken is in {'+','-','*','/','('}:
+				if nextAtomIsNegative is true:
+					list.append(ASTNode->{number or variable}("-" + atom))
+					nextAtomIsNegative = false
+					prevToken = current token
+					advance to next token
+				else:
+					list.append(ASTNode->{number or variable}(atom))
+					prevToken = current token
+					advance to next token
+				
+			else if the current token is '(' and prevToken is in {'+','-','*','/','('}:
+				list.append(ASTNode->dummyOpenParen)
+				prevToken = current token
+				advance to next token
+				
+			else if the current token is ')' and prevToken is {atom or ')'}:
+				list.append(ASTNode->dummyClosedParen)
+				prevToken = current token
+				advance to next token
+				
+			else:
+				delete any existing nodes
+				throw an error and print the current token
+				
+		return list
+		
+###
+shuntingYardAlgorithm (input::= list of nodes):
+	ouputQueue <-- <queue of AST Nodes>
+	operatorStack <-- <stack of AST Nodes>
+	
+	for each node in the list:
+		if the node is an atom:
+			push the node into output queue
+			
+		if the node is {+ or - or * or /}:
+			if the operatorStack is not empty and the top is an operator:
+				while the operatorNode at the top of the operatorStack has a greater precedence than the current node:
+					push the top of the operatorStack to the ouputQueue
+					pop the top of the operatorStack
+					
+			push the node into the operatorStack
+			
+		if the node is a '(':
+			push the node into the operatorStack
+			
+		if the node is a ')':
+			while the stack is not empty and top of the operatorStack is not a '(':
+				push the top of the operatorStack to the ouputQueue
+				pop the top of the operatorStack
+				
+			if the top of the operatorStack is a '(':
+				pop the top of the operatorStack
+			else:
+				throw a mismatched parenthesis error
+				
+	while the operatorStack is not empty:
+		push the top of the operatorStack to the ouputQueue
+		pop the top of the operatorStack
+				
+	return ouputQueue
