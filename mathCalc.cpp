@@ -38,6 +38,18 @@ int main(int argc, char *argv[]) {
 				Lexer lexer(inputLine);
 				vector<Token> tokens = lexer.tokenize();
 				representTokenList(tokens, isDebugOn);
+				
+				Parser parse(tokens);
+				parse.parseAndConstructAST();
+				ASTNode* ast = parse.getAST();
+				
+				if(isDebugOn) {
+					cout << "DEBUG(ast): ";
+					representAST(ast);
+					cout << endl;
+				}
+				
+				deleteAST(ast);
 			}
 			
 			catch(MathInterpreterError &e) {

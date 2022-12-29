@@ -37,7 +37,7 @@ class Parser {
 		int operatorPrecedence(NodeType n);
 		bool isOperator(NodeType n);
 		queue<ASTNode*> expr_shuntingYardAlgorithm(vector<ASTNode*> &v);
-		ASTNode* expr(int backTrackIdx);
+		ASTNode* expr();
 };
 
 #endif

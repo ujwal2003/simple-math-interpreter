@@ -53,6 +53,14 @@ Parser::Parser(vector<Token> inTokenList) {
 void Parser::parseAndConstructAST() {
 	if(currTok.type == T_NONE)
 		tree = nullptr;
+	
+	if(currTok.type == T_Number || currTok.type == T_Variable)
+		tree = expr();
+	
+	else if(currTok.type != T_NONE) {
+		cout << "overflow of tokens, likely invalid syntax" << endl;
+		raiseError();
+	}
 }
 
 //return constructed abstract syntax tree
@@ -300,7 +308,7 @@ queue<ASTNode*> Parser::expr_shuntingYardAlgorithm(vector<ASTNode*> &v) {
 }
 
 //returns AST of expression
-ASTNode* Parser::expr(int backTrackIdx) {
+ASTNode* Parser::expr() {
 	vector<ASTNode*> infixExpr = expr_infixExpr();
 	queue<ASTNode*> postfixExpr = expr_shuntingYardAlgorithm(infixExpr);
 	
@@ -313,9 +321,9 @@ ASTNode* Parser::expr(int backTrackIdx) {
 		
 		if(isOperator(postfixExpr.front()->type)) {
 			if(astStack.size() >= 2) {
-				postfixExpr.front()->left = astStack.top();
-				astStack.pop();
 				postfixExpr.front()->right = astStack.top();
+				astStack.pop();
+				postfixExpr.front()->left = astStack.top();
 				astStack.pop();
 				astStack.push(postfixExpr.front());
 				postfixExpr.pop();
