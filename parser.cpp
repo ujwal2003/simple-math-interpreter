@@ -161,14 +161,14 @@ void Parser::expr_restOfInfixExpr(vector<ASTNode*> &v) {
 		//valid syntax for atoms
 		else if(isAtom(currTok) && isTokenIn(prevToken, "+-*/(")) {
 			if(nextAtomIsNegative) {
+				prevToken.copyToken(currTok);
 				v.push_back(atom(tokenIdx));
 				string temp = v[v.size()-1]->nodeValue;
 				v[v.size()-1]->nodeValue = "-" + temp;
 				nextAtomIsNegative = false;
-				prevToken.copyToken(currTok);
 			} else {
-				v.push_back(atom(tokenIdx));
 				prevToken.copyToken(currTok);
+				v.push_back(atom(tokenIdx));
 			}
 		}
 		
