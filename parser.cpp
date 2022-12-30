@@ -175,8 +175,9 @@ void Parser::expr_restOfInfixExpr(vector<ASTNode*> &v) {
 		
 		//valid syntax for open parenthesis
 		else if(currTok.type == T_OpenParen && isTokenIn(prevToken, "+-*/(")) {
-			if(prevToken.type == T_Minus && nextAtomIsNegative)
+			if(prevToken.type == T_Minus && nextAtomIsNegative) {
 				nextAtomIsNegative = false;
+			}
 			v.push_back(new ASTNode(N_dummyOpenParen));
 			prevToken.copyToken(currTok);
 			nextToken();
@@ -289,7 +290,7 @@ queue<ASTNode*> Parser::expr_shuntingYardAlgorithm(vector<ASTNode*> &v) {
 				operatorStack.pop();
 			}
 			
-			if(operatorStack.top()->type == N_dummyOpenParen) {
+			if(!operatorStack.empty() && operatorStack.top()->type == N_dummyOpenParen) {
 				operatorStack.pop();
 			} else {
 				for(int i=0; i<v.size(); i++)
