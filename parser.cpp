@@ -152,8 +152,9 @@ void Parser::expr_restOfInfixExpr(vector<ASTNode*> &v) {
 		}
 		
 		//unary operator syntax
-		else if(isTokenIn(currTok, "+-") && isTokenIn(prevToken, "()")) {
-			nextAtomIsNegative = true;
+		else if(isTokenIn(currTok, "+-") && isTokenIn(prevToken, "+-*/()")) {
+			if(currTok.type == T_Minus)
+				nextAtomIsNegative = true;
 			prevToken.copyToken(currTok);
 			nextToken();
 		}
