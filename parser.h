@@ -28,16 +28,6 @@ class Parser {
 		ASTNode* getAST();
 		
 		ASTNode* atom(int backTrackIdx);
-		
-		vector<ASTNode*> expr_infixExpr();
-		void expr_restOfInfixExpr(vector<ASTNode*> &v);
-		bool isAtom(Token t);
-		bool isTokenIn(Token t, string check);
-		ASTNode* returnOperationNodeFromToken(Token t);
-		int operatorPrecedence(NodeType n);
-		bool isOperator(NodeType n);
-		queue<ASTNode*> expr_shuntingYardAlgorithm(vector<ASTNode*> &v);
-		ASTNode* expr();
 };
 
 #endif
