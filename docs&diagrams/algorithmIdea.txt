@@ -1,1 +1,26 @@
-insert algorithm here
+Infix_Nodes_List:
+	let there be a list of nodes
+	let a 'previous token' variable be initialized to none
+	
+	while there are tokens to be read:
+		if the token is either: number, var, *, /, (, or ) :
+			create appropriate node and append it to back of the list
+			set the previous token to the current token
+			advance to the next token
+		
+		if the token is either + or - and the previous token is either a +, - or none:
+			do Create_Unary_Operator_Node() and append the returned node to back of the list
+			
+	return the list
+			
+Create_Unary_Operator_Node:
+	if the current token is a plus:
+		advance to the next token
+		return a unary operator node => ("+", recursive: Create_Unary_Operator_Node())
+		
+	if the current token is a minus:
+		advance to the next token
+		return a unary operator node => ("-", recursive: Create_Unary_Operator_Node())
+		
+	if the current token is an atom (a.k.a a number or variable)
+		return an atom() node
