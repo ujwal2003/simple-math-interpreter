@@ -18,9 +18,12 @@ Create_Unary_Operator_Node:
 		advance to the next token
 		return a unary operator node => ("+", recursive: Create_Unary_Operator_Node())
 		
-	if the current token is a minus:
+	else if the current token is a minus:
 		advance to the next token
 		return a unary operator node => ("-", recursive: Create_Unary_Operator_Node())
 		
-	if the current token is an atom (a.k.a a number or variable)
+	else if the current token is an atom (a.k.a a number or variable):
 		return an atom() node
+		
+	else:
+		raise an invalid syntax error
