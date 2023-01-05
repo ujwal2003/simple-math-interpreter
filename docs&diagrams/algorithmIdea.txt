@@ -70,3 +70,31 @@ Shunting_Yard_Algorithm(input->list of nodes):
 		
 	return the output queue
 			
+			
+expression_AST:
+	let there be a list of nodes called 'infix' = Infix_Nodes_List()
+	let there be a queue of nodes called 'postfix' = Shunting_Yard_Algorithm(infix)
+	
+	let there be a stack of nodes called 'AST_stack'
+	
+	while postfix is not empty:
+		if the front of postfix is either a unary-operator, a number, or a variable:
+			push it onto the AST_stack
+			pop the front of postfix
+			
+		else if the front of postfix is in {+-*/}:
+			if the stack has at least a size of two:
+				pop the top of the stack and add it as the right node of the front of postfix
+				pop the top of the stack and add it as the left node of the front of postfix
+				push the front of postfix onto the stack
+				pop the front of postfix
+			else:
+				raise an invalid syntax error for the current node
+				
+		else:
+			raise an error
+			
+	if the stack has a size greater than one:
+		raise an error
+	else:
+		return the top of the stack
