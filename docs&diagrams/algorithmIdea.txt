@@ -23,7 +23,7 @@ Create_Unary_Operator_Node:
 		advance to the next token
 		return a unary operator node => ("-", recursive: Create_Unary_Operator_Node())
 		
-	else if the current token is an atom (a.k.a a number or variable):
+	else if the current token is an atom (a.k.a number or variable):
 		return an atom() node
 		
 	else:
@@ -31,4 +31,42 @@ Create_Unary_Operator_Node:
 		
 
 Shunting_Yard_Algorithm(input->list of nodes):
+	let there be a queue of nodes known as the 'output queue'
+	let there be a stack of nodes known as the 'operator stack'
 	
+	for each node in the list:
+		if the node is a number, variable or unary-operator:
+			push it into the output queue
+			
+		else if the node is in {+-*/} and the operator stack is empty:
+			push it into the operator stack
+			
+		else if the node is in {+-*/} and the operator stack is not empty:
+			while (the stack isn't empty) and the top of the operator stack is not a open parenthesis and 
+			  either (the top has greater precedence than the node 
+			  or the node and the top have the same precedence and the node is left associative):
+					pop the top of the operator stack and push it into the output queue
+			push the node into the operator stack
+			
+		else if the node is an open parenthesis:
+			push it into the operator stack
+			
+		else if the node is a closed parenthesis:
+			while the stack is not empty and the top is not an open parenthesis:
+				pop the top of the operator stack and push it into the output queue
+				
+			if the stack is not empty and the top of the stack is an open parenthesis:
+				pop the top of the operator stack
+			else:
+				raise a mismatched parenthesis error
+				
+			if the stack is not empty and is an operator:
+				pop the top of the operator stack and push it into the output queue
+				
+	while the stack is not empty:
+		if the top of the stack is a parenthesis:
+			raise a mismatched parenthesis error
+		pop the top of the operator stack and push it into the output queue
+		
+	return the output queue
+			
