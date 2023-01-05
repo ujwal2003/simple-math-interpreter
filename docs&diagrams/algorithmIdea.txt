@@ -13,6 +13,7 @@ Infix_Nodes_List:
 			
 	return the list
 			
+			
 Create_Unary_Operator_Node:
 	if the current token is a plus:
 		advance to the next token
@@ -27,3 +28,7 @@ Create_Unary_Operator_Node:
 		
 	else:
 		raise an invalid syntax error
+		
+
+Shunting_Yard_Algorithm(input->list of nodes):
+	
