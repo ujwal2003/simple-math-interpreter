@@ -28,6 +28,7 @@ class Parser {
 		ASTNode* getAST();
 		
 		ASTNode* atom(int backTrackIdx);
+		ASTNode* unaryOperation();
 };
 
 #endif

@@ -87,4 +87,9 @@ ASTNode* Parser::atom(int backTrackIdx) {
 		return result;
 	}
 }
+
+ASTNode* Parser::unaryOperation() {
+	//TODO: implement code based on pseudo-code in algorithmIdea.txt
+	return nullptr;
+}
 #endif
