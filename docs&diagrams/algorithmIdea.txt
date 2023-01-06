@@ -1,3 +1,4 @@
+###
 Infix_Nodes_List:
 	let there be a list of nodes
 	let a 'previous token' variable be initialized to none
@@ -8,28 +9,65 @@ Infix_Nodes_List:
 			set the previous token to the current token
 			advance to the next token
 		
-		if the token is either + or - and the previous token is either a +, - or none:
-			do Create_Unary_Operator_Node() and append the returned node to back of the list
+		if the token is either + or -:
+			if the previous token is either a +, - or none:
+				do Create_Unary_Operator_Node() and append the returned node to back of the list
+				set the previous token to the current token
+			else:
+				create appropriate node and append it to back of the list
+				set the previous token to the current token
+				advance to the next token
 			
 	return the list
 			
-			
+###		
 Create_Unary_Operator_Node:
-	if the current token is a plus:
-		advance to the next token
-		return a unary operator node => ("+", recursive: Create_Unary_Operator_Node())
+	let there be a node called 'result' and initialize it as a unary operator node
+	let there be a stack of tokens called 'unary_op_stack'
+	let there be a queue of nodes called 'result_queue'
+	
+	while the current token is either a plus or minus:
+		if the token is a plus:
+			push the token into unary_op_stack
+			advance to the next token
+		else if the token is a minus:
+			push the token into unary_op_stack
+			advance to the next token
+			
+	if the current token is either a number or variable:
+		push the token into unary_op_stack
 		
-	else if the current token is a minus:
-		advance to the next token
-		return a unary operator node => ("-", recursive: Create_Unary_Operator_Node())
-		
-	else if the current token is an atom (a.k.a number or variable):
-		return an atom() node
-		
+		while the unary_op_stack is not empty:
+			if the token at the top of the stack is a variable and result_queue is empty:
+				push a variable node into result_queue
+				pop the top of unary_op_stack
+				
+			else if the token at the top of the stack is a number and result_queue is empty:
+				push a number node into result_queue
+				pop the top of unary_op_stack
+				
+			else if the token at the top of the stack is a plus and result_queue is not empty:
+				push a unary-operator node with the value being "+" and its left child being the front of result_queue
+				pop the front of result_queue
+				pop the top of unary_op_stack
+				
+			else if the token at the top of the stack is a minus and the result_queue is not empty:
+				push a unary-operator node with the value being "-" and its left child being the front of result_queue
+				pop the front of result_queue
+				pop the top of unary_op_stack
+				
+			else:
+				raise syntax error	
 	else:
-		raise an invalid syntax error
+		raise syntax error
 		
-
+	if the result_queue does not have a size of one:
+		raise syntax error
+	
+	advance to next token
+	return the front of the queue
+			
+###
 Shunting_Yard_Algorithm(input->list of nodes):
 	let there be a queue of nodes known as the 'output queue'
 	let there be a stack of nodes known as the 'operator stack'
