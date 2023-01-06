@@ -1,4 +1,1 @@
-parser algorithm in 'feature-parser' branch
-pseudo-code and diagrams done, code will be implemented later
-
-branch will be merged with master upon completion of parser
+[will be inserted after 'feature-parser' branch is merged]
