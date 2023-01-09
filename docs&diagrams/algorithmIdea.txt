@@ -22,7 +22,6 @@ Infix_Nodes_List:
 			
 ###		
 Create_Unary_Operator_Node:
-	let there be a node called 'result' and initialize it as a unary operator node
 	let there be a stack of tokens called 'unary_op_stack'
 	let there be a queue of nodes called 'result_queue'
 	
