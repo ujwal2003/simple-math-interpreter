@@ -89,7 +89,78 @@ ASTNode* Parser::atom(int backTrackIdx) {
 }
 
 ASTNode* Parser::unaryOperation() {
-	//TODO: implement code based on pseudo-code in algorithmIdea.txt
-	return nullptr;
+	stack<Token> unaryOpStack;
+	queue<ASTNode*> resultQueue;
+	
+	while(currTok.type == T_Plus || currTok.type == T_Minus) {
+		if(currTok.type == T_Plus) {
+			unaryOpStack.push(currTok);
+			nextToken();
+		} else if(currTok.type == T_Minus) {
+			unaryOpStack.push(T_Minus);
+			nextToken();
+		}
+	}
+	
+	if(currTok.type == T_Number || currTok.type == T_Variable) {
+		unaryOpStack.push(currTok);
+		
+		while(!unaryOpStack.empty()) {
+			//variable
+			if(unaryOpStack.top().type == T_Variable && resultQueue.empty()) {
+				resultQueue.push(new ASTNode(N_Variable));
+				resultQueue.front()->init_VariableNode(currTok.value);
+				unaryOpStack.pop();
+			}
+			//number
+			else if(unaryOpStack.top().type == T_Number && resultQueue.empty()) {
+				resultQueue.push(new ASTNode(N_Number));
+				resultQueue.front()->init_VariableNode(currTok.value);
+				unaryOpStack.pop();
+			}
+			//plus
+			else if(unaryOpStack.top().type == T_Plus && !resultQueue.empty()) {
+				ASTNode* temp = resultQueue.front();
+				resultQueue.pop();
+				resultQueue.push(new ASTNode(N_UnaryOp));
+				resultQueue.front()->init_UnaryOperator("+", temp);
+				unaryOpStack.pop();
+			}
+			//minus
+			else if(unaryOpStack.top().type == T_Minus && !resultQueue.empty()) {
+				ASTNode* temp = resultQueue.front();
+				resultQueue.pop();
+				resultQueue.push(new ASTNode(N_UnaryOp));
+				resultQueue.front()->init_UnaryOperator("-", temp);
+				unaryOpStack.pop();
+			}
+			//error
+			else {
+				while(!resultQueue.empty()) {
+					delete resultQueue.front();
+					resultQueue.pop();
+				}
+				
+				cout << "Invalid syntax for unary operations at token: " << representToken(unaryOpStack.top()) << endl;
+				raiseError();
+			}
+		}
+	} else {
+		//raise error
+		cout << "Invalid syntax for unary operations, expected a number or variable." << endl;
+		raiseError();
+	}
+	
+	if(resultQueue.size() != 1) {
+		while(!resultQueue.empty()) {
+			delete resultQueue.front();
+			resultQueue.pop();
+		}
+		cout << "Error: could not construct abstract syntax tree for unary-operation, likely syntax error." << endl;
+		raiseError();
+	}
+	
+	nextToken();
+	return resultQueue.front();
 }
 #endif

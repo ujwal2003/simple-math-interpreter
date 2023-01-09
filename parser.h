@@ -8,6 +8,7 @@
 #include "tokens.h"
 #include "ast.h"
 #include "error.h"
+#include "debugFuncs.h"
 
 using namespace std;
 
