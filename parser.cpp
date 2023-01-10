@@ -342,4 +342,57 @@ queue<ASTNode*> Parser::shuntingYardAlgorithm(vector<ASTNode*> infix) {
 	
 	return outputQueue;
 }
+
+//expression ::= ((unary|atom) ((PLUS|MINUS|MULT|DIV) (unary|atom))*) | (OPEN_PAREN expr CLOSE_PAREN)*
+ASTNode* Parser::expr() {
+	vector<ASTNode*> infix = infixExpr();
+	queue<ASTNode*> postfix = shuntingYardAlgorithm(infix);
+	
+	stack<ASTNode*> astStack;
+	
+	while(!postfix.empty()) {
+		//atom
+		if(postfix.front()->type == N_UnaryOp || postfix.front()->type == N_Number || postfix.front()->type == N_Variable) {
+			astStack.push(postfix.front());
+			postfix.pop();
+		}
+		
+		//operation
+		else if(isOperator(postfix.front()->type)) {
+			if(astStack.size() >= 2) {
+				postfix.front()->right = astStack.top();
+				astStack.pop();
+				postfix.front()->left = astStack.top();
+				astStack.pop();
+				astStack.push(postfix.front());
+				postfix.pop();
+			} else {
+				//not enough arguments error
+				NodeType errNode = postfix.front()->type;
+				for(ASTNode* n: infix)
+					delete n;
+				cout << "Not enough arguments for operation: " << representNodeType(errNode) << endl;
+				raiseError();
+			}
+		}
+		
+		//error
+		else {
+			NodeType errNode = postfix.front()->type;
+			for(ASTNode* n: infix)
+				delete n;
+			cout << "Failed to build abstract syntax tree at" << representNodeType(errNode) << ", likely syntax error." << endl;
+			raiseError();
+		}
+	}
+	
+	if(astStack.size() > 1 || astStack.empty()) {
+		for(ASTNode* n: infix)
+			delete n;
+		cout << "failed to build abstract syntax tree, likely syntax error." << endl;
+		raiseError();
+	}
+	
+	return astStack.top();
+}
 #endif

@@ -35,6 +35,7 @@ class Parser {
 		bool isLeftAssociative(NodeType op);
 		bool greaterPrecOrSameAndLeftAssoc(NodeType topOfStack, NodeType currOp);
 		queue<ASTNode*> shuntingYardAlgorithm(vector<ASTNode*> infix);
+		ASTNode* expr();
 };
 
 #endif

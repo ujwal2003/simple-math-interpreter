@@ -12,5 +12,6 @@ using namespace std;
 string representToken(Token t);
 void representTokenList(vector<Token> tokens, bool debugFlag);
 
+string representNodeType(NodeType n);
 void representAST(ASTNode* root);
 #endif
