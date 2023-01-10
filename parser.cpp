@@ -229,6 +229,17 @@ vector<ASTNode*> Parser::infixExpr() {
 	return infix;
 }
 
+//checks if node type is an operator
+bool isOperator(NodeType op) {
+	switch(op) {
+		case N_Add: return true;
+		case N_Subtract: return true;
+		case N_Multipy: return true;
+		case N_Divide: return true;
+		default: return false;
+	}
+}
+
 //precedence
 int Parser::opPrecedence(NodeType op) {
 	switch(op) {
@@ -251,12 +262,83 @@ bool Parser::isLeftAssociative(NodeType op) {
 	}
 }
 
+//shunting yard operator check
+bool Parser::greaterPrecOrSameAndLeftAssoc(NodeType topOfStack, NodeType currOp) {
+	if(opPrecedence(topOfStack) > opPrecedence(currOp))
+		return true;
+	
+	else if((opPrecedence(topOfStack) == opPrecedence(currOp)) && isLeftAssociative(currOp))
+		return true;
+	
+	else
+		return false;
+}
+
 //converts infix expression to postfix
 queue<ASTNode*> Parser::shuntingYardAlgorithm(vector<ASTNode*> infix) {
 	queue<ASTNode*> outputQueue;
 	stack<ASTNode*> operatorStack;
 	
-	//TODO: implementation
+	for(ASTNode* node: infix) {
+		//atom
+		if(node->type == N_Number || node->type == N_Variable || node->type == N_UnaryOp) {
+			outputQueue.push(node);
+		}
+		
+		//initial operator
+		else if(operatorStack.empty() && (node->type == N_Add || node->type == N_Subtract || node->type == N_Multipy || node->type == N_Divide)) {
+			operatorStack.push(node);
+		}
+		
+		//operators
+		else if(!operatorStack.empty() && (node->type == N_Add || node->type == N_Subtract || node->type == N_Multipy || node->type == N_Divide)) {
+			while(!operatorStack.empty() && operatorStack.top()->type != N_dummyOpenParen
+					&& isOperator(operatorStack.top()->type) && greaterPrecOrSameAndLeftAssoc(operatorStack.top()->type, node->type)) {
+				outputQueue.push(operatorStack.top());
+				operatorStack.pop();
+			}
+			operatorStack.push(node);
+		}
+		
+		//open parenthesis
+		else if(node->type == N_dummyOpenParen) {
+			operatorStack.push(node);
+		}
+		
+		//closed parenthesis
+		else if(node->type == N_dummyCloseParen) {
+			while(!operatorStack.empty() && operatorStack.top()->type != N_dummyOpenParen) {
+				outputQueue.push(operatorStack.top());
+				operatorStack.pop();
+			}
+			
+			if(!operatorStack.empty() && operatorStack.top()->type == N_dummyOpenParen) {
+				operatorStack.pop();
+			} else {
+				for(int i=0; i<infix.size(); i++)
+					delete infix[i];
+				cout << "Mismatched parenthesis" << endl;
+				raiseError();
+			}
+			
+			if(!operatorStack.empty() && isOperator(operatorStack.top()->type)) {
+				outputQueue.push(operatorStack.top());
+				operatorStack.pop();
+			}
+		}
+	}
+	
+	while(!operatorStack.empty()) {
+		if(operatorStack.top()->type == N_dummyOpenParen || operatorStack.top()->type == N_dummyCloseParen) {
+			for(int i=0; i<infix.size(); i++)
+					delete infix[i];
+			cout << "Mismatched Parenthesis" << endl;
+			raiseError();
+		}
+		
+		outputQueue.push(operatorStack.top());
+		operatorStack.pop();
+	}
 	
 	return outputQueue;
 }

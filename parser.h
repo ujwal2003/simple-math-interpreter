@@ -33,6 +33,7 @@ class Parser {
 		vector<ASTNode*> infixExpr();
 		int opPrecedence(NodeType op);
 		bool isLeftAssociative(NodeType op);
+		bool greaterPrecOrSameAndLeftAssoc(NodeType topOfStack, NodeType currOp);
 		queue<ASTNode*> shuntingYardAlgorithm(vector<ASTNode*> infix);
 };
 
