@@ -88,6 +88,7 @@ ASTNode* Parser::atom(int backTrackIdx) {
 	}
 }
 
+//creates unary operator nodes
 ASTNode* Parser::unaryOperation() {
 	stack<Token> unaryOpStack;
 	queue<ASTNode*> resultQueue;
@@ -160,7 +161,71 @@ ASTNode* Parser::unaryOperation() {
 		raiseError();
 	}
 	
-	nextToken();
 	return resultQueue.front();
+}
+
+//returns list of nodes
+vector<ASTNode*> Parser::infixExpr() {
+	vector<ASTNode*> infix;
+	Token prevToken;
+	prevToken.copyToken(Token(T_NONE));
+	
+	while(currTok.type != T_NONE) {
+		//number
+		if(currTok.type == T_Number || currTok.type == T_Variable) {
+			prevToken.copyToken(currTok);
+			infix.push_back(atom(tokenIdx)); //atom() advances to next token
+		}
+		//multiply
+		else if(currTok.type == T_Multiply) {
+			prevToken.copyToken(currTok);
+			infix.push_back(new ASTNode(N_Multipy));
+			nextToken();
+		}
+		//divide
+		else if(currTok.type == T_Divide) {
+			prevToken.copyToken(currTok);
+			infix.push_back(new ASTNode(N_Divide));
+			nextToken();
+		}
+		//open parenthesis
+		else if(currTok.type == T_OpenParen) {
+			prevToken.copyToken(currTok);
+			infix.push_back(new ASTNode(N_dummyOpenParen));
+			nextToken();
+		}
+		//closed parenthesis
+		else if(currTok.type == T_OpenParen) {
+			prevToken.copyToken(currTok);
+			infix.push_back(new ASTNode(N_dummyCloseParen));
+			nextToken();
+		}
+		//plus or minus
+		else if(currTok.type == T_Plus || currTok.type == T_Minus) {
+			if(prevToken.type == T_Plus || prevToken.type == T_Minus || prevToken.type == T_NONE) {
+				infix.push_back(unaryOperation()); //unaryOperation() does not invoke nextToken()
+				prevToken.copyToken(currTok);
+				nextToken();
+			} else {
+				NodeType nType = (currTok.type == T_Plus) ? N_Add : N_Subtract;
+				infix.push_back(new ASTNode(nType));
+				prevToken.copyToken(currTok);
+				nextToken();
+			}
+		}
+		//error
+		else {
+			if(!infix.empty()) {
+				for(ASTNode* n: infix) {
+					delete n;
+				}
+			}
+			infix.clear();
+			cout << "invalid syntax for expression at token: " << representToken(currTok) << endl;
+			raiseError();
+		}
+	}
+	
+	return infix;
 }
 #endif

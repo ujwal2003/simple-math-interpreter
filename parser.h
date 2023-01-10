@@ -30,6 +30,7 @@ class Parser {
 		
 		ASTNode* atom(int backTrackIdx);
 		ASTNode* unaryOperation();
+		vector<ASTNode*> infixExpr();
 };
 
 #endif
