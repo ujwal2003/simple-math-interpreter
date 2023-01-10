@@ -31,6 +31,9 @@ class Parser {
 		ASTNode* atom(int backTrackIdx);
 		ASTNode* unaryOperation();
 		vector<ASTNode*> infixExpr();
+		int opPrecedence(NodeType op);
+		bool isLeftAssociative(NodeType op);
+		queue<ASTNode*> shuntingYardAlgorithm(vector<ASTNode*> infix);
 };
 
 #endif

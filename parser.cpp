@@ -228,4 +228,36 @@ vector<ASTNode*> Parser::infixExpr() {
 	
 	return infix;
 }
+
+//precedence
+int Parser::opPrecedence(NodeType op) {
+	switch(op) {
+		case N_Add: return 1;
+		case N_Subtract: return 1;
+		case N_Multipy: return 2;
+		case N_Divide: return 2;
+		default: return -1;
+	}
+}
+
+//left associativity
+bool Parser::isLeftAssociative(NodeType op) {
+	switch(op) {
+		case N_Add: return true;
+		case N_Subtract: return true;
+		case N_Multipy: return true;
+		case N_Divide: return true;
+		default: return false;
+	}
+}
+
+//converts infix expression to postfix
+queue<ASTNode*> Parser::shuntingYardAlgorithm(vector<ASTNode*> infix) {
+	queue<ASTNode*> outputQueue;
+	stack<ASTNode*> operatorStack;
+	
+	//TODO: implementation
+	
+	return outputQueue;
+}
 #endif
