@@ -53,6 +53,14 @@ Parser::Parser(vector<Token> inTokenList) {
 void Parser::parseAndConstructAST() {
 	if(currTok.type == T_NONE)
 		tree = nullptr;
+	
+	else if(currTok.type == T_OpenParen || currTok.type == T_Plus || currTok.type == T_Minus || currTok.type == T_Number || currTok.type == T_Variable) {
+		tree = expr();
+	}
+	
+	else {
+		raiseError();
+	}
 }
 
 //return constructed abstract syntax tree
@@ -195,14 +203,14 @@ vector<ASTNode*> Parser::infixExpr() {
 			nextToken();
 		}
 		//closed parenthesis
-		else if(currTok.type == T_OpenParen) {
+		else if(currTok.type == T_ClosedParen) {
 			prevToken.copyToken(currTok);
 			infix.push_back(new ASTNode(N_dummyCloseParen));
 			nextToken();
 		}
 		//plus or minus
 		else if(currTok.type == T_Plus || currTok.type == T_Minus) {
-			if(prevToken.type == T_Plus || prevToken.type == T_Minus || prevToken.type == T_NONE) {
+			if(prevToken.type == T_Plus || prevToken.type == T_Minus || prevToken.type == T_OpenParen || prevToken.type == T_NONE) {
 				infix.push_back(unaryOperation()); //unaryOperation() does not invoke nextToken()
 				prevToken.copyToken(currTok);
 				nextToken();
