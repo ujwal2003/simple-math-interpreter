@@ -30,6 +30,12 @@ void ASTNode::init_AssignNode(ASTNode* var, ASTNode* expression) {
 	right = expression;
 }
 
+//unary operator node
+void ASTNode::init_UnaryOperator(string sign, ASTNode* atom) {
+	nodeValue = sign;
+	left = atom;
+}
+
 //add node
 void ASTNode::init_AddNode(ASTNode* opLeft, ASTNode* opRight) {
 	left = opLeft;

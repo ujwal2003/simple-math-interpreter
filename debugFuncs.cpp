@@ -37,6 +37,23 @@ void representTokenList(vector<Token> tokens, bool debugFlag) {
 	}
 }
 
+string representNodeType(NodeType n) {
+	switch(n) {
+		case N_NULL: return "NULL";
+		case N_Number: return "Number";
+		case N_Variable: return "Identifier";
+		case N_Assign: return "Assign";
+		case N_UnaryOp: return "Unary_Operation";
+		case N_Add: return "Addition";
+		case N_Subtract: return "Subtraction";
+		case N_Multipy: return "Multiplication";
+		case N_Divide: return "Division";
+		case N_dummyOpenParen: return "Closed_Paren";
+		case N_dummyCloseParen: return "Open_Paren";
+		default: return "ERROR:UNKNOWN";
+	}
+}
+
 void representAST(ASTNode* root) {
 	//null
 	if(root == nullptr) {
@@ -51,6 +68,13 @@ void representAST(ASTNode* root) {
 	//variable node
 	if(root->type == N_Variable) {
 		cout << root->nodeValue;
+		return;
+	}
+	//unary operation
+	if(root->type == N_UnaryOp) {
+		cout << root->nodeValue << '(';
+		representAST(root->left);
+		cout << ')';
 		return;
 	}
 	//assign node

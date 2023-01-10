@@ -1,1 +1,137 @@
-[deleted]
+###
+Infix_Nodes_List:
+	let there be a list of nodes
+	let a 'previous token' variable be initialized to none
+	
+	while there are tokens to be read:
+		if the token is either: number, var, *, /, (, or ) :
+			create appropriate node and append it to back of the list
+			set the previous token to the current token
+			advance to the next token
+		
+		if the token is either + or -:
+			if the previous token is either a +, - or none:
+				do Create_Unary_Operator_Node() and append the returned node to back of the list
+				set the previous token to the current token
+			else:
+				create appropriate node and append it to back of the list
+				set the previous token to the current token
+				advance to the next token
+			
+	return the list
+			
+###		
+Create_Unary_Operator_Node:
+	let there be a stack of tokens called 'unary_op_stack'
+	let there be a queue of nodes called 'result_queue'
+	
+	while the current token is either a plus or minus:
+		if the token is a plus:
+			push the token into unary_op_stack
+			advance to the next token
+		else if the token is a minus:
+			push the token into unary_op_stack
+			advance to the next token
+			
+	if the current token is either a number or variable:
+		push the token into unary_op_stack
+		
+		while the unary_op_stack is not empty:
+			if the token at the top of the stack is a variable and result_queue is empty:
+				push a variable node into result_queue
+				pop the top of unary_op_stack
+				
+			else if the token at the top of the stack is a number and result_queue is empty:
+				push a number node into result_queue
+				pop the top of unary_op_stack
+				
+			else if the token at the top of the stack is a plus and result_queue is not empty:
+				push a unary-operator node with the value being "+" and its left child being the front of result_queue
+				pop the front of result_queue
+				pop the top of unary_op_stack
+				
+			else if the token at the top of the stack is a minus and the result_queue is not empty:
+				push a unary-operator node with the value being "-" and its left child being the front of result_queue
+				pop the front of result_queue
+				pop the top of unary_op_stack
+				
+			else:
+				raise syntax error	
+	else:
+		raise syntax error
+		
+	if the result_queue does not have a size of one:
+		raise syntax error
+	
+	advance to next token
+	return the front of the queue
+			
+###
+Shunting_Yard_Algorithm(input->list of nodes):
+	let there be a queue of nodes known as the 'output queue'
+	let there be a stack of nodes known as the 'operator stack'
+	
+	for each node in the list:
+		if the node is a number, variable or unary-operator:
+			push it into the output queue
+			
+		else if the node is in {+-*/} and the operator stack is empty:
+			push it into the operator stack
+			
+		else if the node is in {+-*/} and the operator stack is not empty:
+			while (the stack isn't empty) and the top of the operator stack is not a open parenthesis and 
+			  either (the top has greater precedence than the node 
+			  or the node and the top have the same precedence and the node is left associative):
+					pop the top of the operator stack and push it into the output queue
+			push the node into the operator stack
+			
+		else if the node is an open parenthesis:
+			push it into the operator stack
+			
+		else if the node is a closed parenthesis:
+			while the stack is not empty and the top is not an open parenthesis:
+				pop the top of the operator stack and push it into the output queue
+				
+			if the stack is not empty and the top of the stack is an open parenthesis:
+				pop the top of the operator stack
+			else:
+				raise a mismatched parenthesis error
+				
+			if the stack is not empty and is an operator:
+				pop the top of the operator stack and push it into the output queue
+				
+	while the stack is not empty:
+		if the top of the stack is a parenthesis:
+			raise a mismatched parenthesis error
+		pop the top of the operator stack and push it into the output queue
+		
+	return the output queue
+			
+			
+expression_AST:
+	let there be a list of nodes called 'infix' = Infix_Nodes_List()
+	let there be a queue of nodes called 'postfix' = Shunting_Yard_Algorithm(infix)
+	
+	let there be a stack of nodes called 'AST_stack'
+	
+	while postfix is not empty:
+		if the front of postfix is either a unary-operator, a number, or a variable:
+			push it onto the AST_stack
+			pop the front of postfix
+			
+		else if the front of postfix is in {+-*/}:
+			if the stack has at least a size of two:
+				pop the top of the stack and add it as the right node of the front of postfix
+				pop the top of the stack and add it as the left node of the front of postfix
+				push the front of postfix onto the stack
+				pop the front of postfix
+			else:
+				raise an invalid syntax error for the current node
+				
+		else:
+			raise an error
+			
+	if the stack has a size greater than one:
+		raise an error
+	else:
+		return the top of the stack

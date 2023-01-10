@@ -8,6 +8,7 @@
 #include "tokens.h"
 #include "ast.h"
 #include "error.h"
+#include "debugFuncs.h"
 
 using namespace std;
 
@@ -28,6 +29,13 @@ class Parser {
 		ASTNode* getAST();
 		
 		ASTNode* atom(int backTrackIdx);
+		ASTNode* unaryOperation();
+		vector<ASTNode*> infixExpr();
+		int opPrecedence(NodeType op);
+		bool isLeftAssociative(NodeType op);
+		bool greaterPrecOrSameAndLeftAssoc(NodeType topOfStack, NodeType currOp);
+		queue<ASTNode*> shuntingYardAlgorithm(vector<ASTNode*> infix);
+		ASTNode* expr();
 };
 
 #endif
