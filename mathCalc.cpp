@@ -47,6 +47,8 @@ int main(int argc, char *argv[]) {
 					representAST(astRoot);
 					cout << endl;
 				}
+				
+				deleteAST(astRoot);
 			}
 			
 			catch(MathInterpreterError &e) {
