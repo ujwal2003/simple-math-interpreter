@@ -6,7 +6,7 @@ current progress:
 - [x] lexer
 - [x] AST
 - [ ] parser
-    - [ ] expressions
+    - [x] expressions
 	- [ ] variable assignments
 - [ ] interpreter  
     - [ ] simple expressions
