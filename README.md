@@ -5,9 +5,9 @@ current progress:
 - [x] tokens
 - [x] lexer
 - [x] AST
-- [ ] parser
+- [x] parser
     - [x] expressions
-	- [ ] variable assignments
+	- [x] variable assignments
 - [ ] interpreter  
     - [ ] simple expressions
 	- [ ] order of operations
