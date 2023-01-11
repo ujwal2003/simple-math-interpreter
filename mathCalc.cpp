@@ -3,6 +3,7 @@
 #include "lexer.h"
 #include "parser.h"
 #include "ast.h"
+#include "interpreter.h"
 #include "debugFuncs.h"
 #include "error.h"
 
