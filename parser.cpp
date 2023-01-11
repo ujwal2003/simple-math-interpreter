@@ -54,6 +54,13 @@ void Parser::parseAndConstructAST() {
 	if(currTok.type == T_NONE)
 		tree = nullptr;
 	
+	else if(currTok.type == T_Variable) {
+		tree = assign(tokenIdx);
+		if(tree == nullptr) {
+			tree = expr();
+		}
+	}
+	
 	else if(currTok.type == T_OpenParen || currTok.type == T_Plus || currTok.type == T_Minus || currTok.type == T_Number || currTok.type == T_Variable) {
 		tree = expr();
 	}
@@ -402,5 +409,30 @@ ASTNode* Parser::expr() {
 	}
 	
 	return astStack.top();
+}
+
+//assign ::= idt EQUAL expr
+ASTNode* Parser::assign(int backTrackIdx) {
+	ASTNode* result = nullptr;
+	ASTNode* varNode = nullptr;
+	
+	if(currTok.type == T_Variable) {
+		varNode = new ASTNode(N_Variable);
+		varNode->init_VariableNode(currTok.value);
+		
+		nextToken();
+		if(currTok.type == T_Equal) {
+			nextToken();
+			ASTNode* exprResult = expr();
+			
+			result = new ASTNode(N_Assign);
+			result->init_AssignNode(varNode, exprResult);
+			return result;
+		}
+	}
+	
+	delete varNode;
+	goToTokenAtIndex(backTrackIdx);
+	return nullptr;
 }
 #endif
