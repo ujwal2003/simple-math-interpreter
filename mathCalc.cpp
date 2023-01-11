@@ -28,6 +28,7 @@ int main(int argc, char *argv[]) {
 	
 	//main input loop
 	bool continueInterpreter = true;
+	Interpreter interpret;
 	while(continueInterpreter) {
 		//get user input
 		string inputLine;
@@ -48,6 +49,9 @@ int main(int argc, char *argv[]) {
 					representAST(astRoot);
 					cout << endl;
 				}
+				
+				interpret.initialize(astRoot);
+				interpret.doEvaluation();
 				
 				deleteAST(astRoot);
 			}

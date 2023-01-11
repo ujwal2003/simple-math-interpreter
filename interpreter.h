@@ -14,12 +14,13 @@ class Interpreter {
 		stack<double> evaluationStack;
 		map<string, double> symbolTable;
 		
-		ASTNode* tree;
+		ASTNode* astRoot;
 		void raiseError();
 		
 	public:
-		Interpreter(ASTNode* abstractSyntaxTree);
-		void evaluate();
+		void initialize(ASTNode* asbtractSyntaxTree);
+		void evaluate(ASTNode* tree);
+		void doEvaluation();
 };
 
 #endif
