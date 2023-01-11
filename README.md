@@ -8,7 +8,4 @@ current progress:
 - [x] parser
     - [x] expressions
 	- [x] variable assignments
-- [ ] interpreter  
-    - [ ] simple expressions
-	- [ ] order of operations
-	- [ ] variables
+- [ ] interpreter
